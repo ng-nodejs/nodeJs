@@ -4,10 +4,18 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require("body-parser")
 
+const mongoose = require('mongoose');
+
+
 const productsRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/order');
+const userRoutes = require('./api/routes/user');
+
+
+mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true });
 
 app.use(morgan('dev'));
+app.use('/uploads', express.static('uploads'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -24,6 +32,8 @@ app.use((req, res, next) => {
 //Routes which should handle req;
 app.use('/products', productsRoutes);
 app.use('/order', orderRoutes);
+app.use('/user', userRoutes);
+
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
